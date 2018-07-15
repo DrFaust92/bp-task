@@ -3,9 +3,13 @@ package bpTask.service.http
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse}
 import akka.http.scaladsl.server.{Directives, ExceptionHandler, Route}
 import bpTask.service.core.Processing
+import org.json4s._
+import org.json4s.native.Serialization.write
 
 
 trait Resource extends Directives {
+
+  implicit val formats = DefaultFormats
 
 
   val myExceptionHandler = ExceptionHandler {
@@ -22,7 +26,9 @@ trait Resource extends Directives {
       pathPrefix("bp-task") {
         get {
           pathSingleSlash {
-            complete(HttpEntity(ContentTypes.`application/json`, Processing.dataOccur.toString))
+            //print entire map
+            //probably should outout as json
+            complete(HttpEntity(ContentTypes.`application/json`, write(Map("WordList" -> Processing.dataOccur.keys))))
           }
         } ~
           pathPrefix(Segment) { word =>

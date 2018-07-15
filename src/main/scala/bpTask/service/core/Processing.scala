@@ -7,13 +7,19 @@ import org.json4s.native.JsonMethods
 import scala.collection.mutable
 import scala.util.Try
 
-class Processing {
+class Processing(cmdPath: String) {
 
   implicit val jsonDefaultFormats = DefaultFormats
 
-  def start() = {
+
+  import scala.sys.process._
+
+  // neat trick ive learned while working on the project
+  private val jsonStream: Stream[String] = cmdPath.lineStream_!
+
+  def start(): Unit = {
     for {
-      json <- Processing.jsonStream
+      json <- jsonStream
     } {
       val logEntry = Try(JsonMethods.parse(json).extract[LogEntry])
 
@@ -29,15 +35,10 @@ class Processing {
 object Processing {
   type Word = String
   type Occur = Int
-  //val jsonStream: Stream[String] = Stream.Empty
+
   val dataOccur: mutable.HashMap[Word, Occur] = new mutable.HashMap[Word, Occur]()
-  val cmd = "C:\\git\\testproj\\generator-windows-amd64.exe"
 
-  import scala.sys.process._
-
-  val jsonStream = cmd.lineStream_!
-
-  def addWordCount(word: Word) = {
+  def addWordCount(word: Word): Unit = {
     dataOccur.get(word) match {
       case Some(occur) => Processing.dataOccur.update(word, occur + 1)
       case None => Processing.dataOccur.put(word, 0)
