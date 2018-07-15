@@ -10,9 +10,11 @@ Main takes 3 String paramaters:
  havent tested the other ones)
  
  ###Getting List of all distinct words:
+ 
  {host}:{port}/bp-task/ (GET request) - will return json array of words
  
  ###Getting Count for specific words:
+ 
  {host}:{port}/bp-task/{word} (GET request) - will an a count for specific word
  
 
