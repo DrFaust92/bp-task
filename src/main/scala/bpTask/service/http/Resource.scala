@@ -22,13 +22,20 @@ trait Resource extends Directives {
       pathPrefix("bp-task") {
         get {
           pathSingleSlash {
-            complete(HttpEntity(ContentTypes.`application/json`, Processing.dataOccur.getOrElse("data", 999).toString))
+            complete(HttpEntity(ContentTypes.`application/json`, Processing.dataOccur.toString))
           }
-        }
+        } ~
+          pathPrefix(Segment) { word =>
+            pathEnd {
+              get {
+                complete(HttpEntity(ContentTypes.`application/json`, Processing.dataOccur.getOrElse(word, 0).toString))
+              }
+            }
+          }
       }
     }
-
 }
+
 
 
 
