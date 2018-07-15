@@ -2,6 +2,7 @@ package bpTask.service.http
 
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse}
 import akka.http.scaladsl.server.{Directives, ExceptionHandler, Route}
+import bpTask.service.core.Processing
 
 
 trait Resource extends Directives {
@@ -21,8 +22,7 @@ trait Resource extends Directives {
       pathPrefix("bp-task") {
         get {
           pathSingleSlash {
-            complete(HttpEntity(ContentTypes.`text/html(UTF-8)`,
-              "<html><body>Hello world!</body></html>"))
+            complete(HttpEntity(ContentTypes.`application/json`, Processing.dataOccur.getOrElse("data", 999).toString))
           }
         }
       }
