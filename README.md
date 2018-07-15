@@ -1,6 +1,22 @@
 #bp-task
 
 
+##Usage:
+
+Main takes 3 String paramaters:
+* host url
+* port
+* log generator path (ive used the windows one,
+ havent tested the other ones)
+ 
+ ###Getting List of all distinct words:
+ {host}:{port}/bp-task/ (GET request) - will return json array of words
+ 
+ ###Getting Count for specific words:
+ {host}:{port}/bp-task/{word} (GET request) - will an a count for specific word
+ 
+
+
 
 ##things to improve:
 * Better logging and error handling 
