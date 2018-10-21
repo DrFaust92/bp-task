@@ -28,16 +28,27 @@ trait Resource extends Directives {
           pathSingleSlash {
             //print entire map
             //probably should outout as json
-            complete(HttpEntity(ContentTypes.`application/json`, write(Map("WordList" -> Processing.dataOccur.keys))))
-          }
-        } ~
-          pathPrefix(Segment) { word =>
-            pathEnd {
-              get {
-                complete(HttpEntity(ContentTypes.`application/json`, Processing.dataOccur.getOrElse(word, 0).toString))
+            complete(HttpEntity(ContentTypes.`application/json`,
+              {
+              try {
+                Processing.addOccur()
+                write(Processing.getOccur)
               }
+                catch {
+                  case ex: Exception => write(ex.getMessage)
+                }
             }
+            ))
           }
+        }
+//        ~
+//          pathPrefix(Segment) { word =>
+//            pathEnd {
+//              get {
+//                complete(HttpEntity(ContentTypes.`application/json`, Processing.dataOccur.getOrElse(word, 0).toString))
+//              }
+//            }
+//          }
       }
     }
 }
